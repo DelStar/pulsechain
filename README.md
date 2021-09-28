@@ -19,6 +19,10 @@ Follow these instructions to manually add the Testnet to your Metamask plugin. A
 - Currency Symbol: `TPLS`
 - Block Explorer URL: `https://scan.pulsechain.com`
 
+|   Step 1    |   Step 2    |
+| ----------- | ----------- |
+![Metamask step1](images/step1.png) | ![Metamask step2](images/step2.png) |
+
 **Congratulations**! You are now connected to the PulseChain Testnet. Existing ethereum accounts that had balances as of block `13,224,745` (*Sep-14-2021 03:48:51 PM +UTC*) will have the equivalent on balance on the PulseChain Testnet.
 
 ## Connecting a PulseChain Node
