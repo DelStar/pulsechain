@@ -21,7 +21,7 @@ Follow these instructions to manually add the Testnet to your Metamask plugin. A
 
 **Congratulations**! You are now connected to the PulseChain Testnet. Existing ethereum accounts that had balances as of block `13,224,745` (*Sep-14-2021 03:48:51 PM +UTC*) will have the equivalent on balance on the PulseChain Testnet.
 
-## Connecting a Go-Pulse Node
+## Connecting a PulseChain Node
 
 > **Warning**: The PulseChain Testnet includes **all** of the Ethereum mainnet state up to block `13,224,745`. This means that the system requirements for running a node will be high, particularly the storage requirements. You should only run your own testnet node if needed for development purposes, etc...
 
