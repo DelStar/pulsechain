@@ -25,6 +25,16 @@ Follow these instructions to manually add the Testnet to your Metamask plugin. A
 
 **Congratulations**! You are now connected to the PulseChain Testnet. Existing ethereum accounts that had balances as of block `13,224,745` (*Sep-14-2021 03:48:51 PM +UTC*) will have the equivalent on balance on the PulseChain Testnet.
 
+## Getting tPLS to use on the PulseChain Testnet
+
+To get tPLS you can use the tPLS faucet.
+
+1. Navigate to the tPLS faucet https://faucet.testnet.pulsechain.com/
+2. Connect your Metamask wallet by clicking on the button.
+3. Enter the address you want to send tPLS to and click the `Request` button.
+4. Wait up to 60 seconds to receive your tPLS.
+
+
 ## Connecting a PulseChain Node
 
 > **Warning**: The PulseChain Testnet includes **all** of the Ethereum mainnet state up to block `13,224,745`. This means that the system requirements for running a node will be high, particularly the storage requirements. You should only run your own testnet node if needed for development purposes, etc...
