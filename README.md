@@ -22,10 +22,10 @@ Follow these instructions to manually add the Testnet to your Metamask plugin. A
 
 **2. Enter the following information:**
 - Network Name: `PulseChain Testnet`
-- New RPC URL: `https://rpc.testnet.pulsechain.com`
+- New RPC URL: `https://rpc.v2.testnet.pulsechain.com`
 - Chain ID: `940`
 - Currency Symbol: `tPLS`
-- Block Explorer URL: `https://scan.pulsechain.com`
+- Block Explorer URL: `https://scan.v2.pulsechain.com`
 
 |   Step 1    |   Step 2    |
 | ----------- | ----------- |
@@ -37,7 +37,7 @@ Follow these instructions to manually add the Testnet to your Metamask plugin. A
 
 To get tPLS you can use the tPLS faucet.
 
-1. Navigate to the tPLS faucet https://faucet.testnet.pulsechain.com/
+1. Navigate to the tPLS faucet https://faucet.v2.testnet.pulsechain.com/
 2. Connect your Metamask wallet by clicking on the button.
 3. Enter the address you want to send tPLS to and click the `Request` button.
 4. Wait up to 60 seconds to receive your tPLS.
@@ -139,7 +139,7 @@ After the init command has completed, you can follow the normal steps above to [
 
 # Validator Registration, Rotation, and Staking
 
-PulseChain validator registration, staking, rotation, and revenue share are managed via system contracts that can be interacted with through the [PulseChain validator & staking ui](https://stake.testnet.pulsechain.com/).
+PulseChain validator registration, staking, rotation, and revenue share are managed via system contracts that can be interacted with through the [PulseChain validator & staking ui](https://stake.v2.testnet.pulsechain.com/).
 
 > The staking UI will require that you have Metamask configured and connected to the PulseChain Testnet. See steps above for connecting Metamask.
 
@@ -189,7 +189,7 @@ Running a validator node performs an important role for the PulseChain network, 
 >
 > ***Once again: only register a validator if you are fully committed to maintaining its availability and uptime - THIS IS NOT FOR MOST USERS!***
 
-With the above caveats understood, you can register the validator through the [PulseChain validator & staking ui](https://stake.testnet.pulsechain.com/). Steps for doing so include:
+With the above caveats understood, you can register the validator through the [PulseChain validator & staking ui](https://stake.v2.testnet.pulsechain.com/). Steps for doing so include:
 
 1. Making a **non-refundable deposit of 500,000 tPLS** to the staking contract from the validator address. This serves to prevent spam registrations.
 > **About the Deposit:** This is intentionally high during the Testnet phase to limit the number of 3rd party validators and ensure network availability and performance. If you have serious intentions of running a high-availability validator for testnet, please reach out to the PulseChain team via Telegram, and we can assist with funding via the Testnet treasury account.
@@ -201,5 +201,5 @@ With the above caveats understood, you can register the validator through the [P
 
 ### Unregister a Validator
 
-Validators looking to cease operation can un-register themselves vai the same [PulseChain validator & staking ui](https://stake.testnet.pulsechain.com/). An un-registered validator will be removed from the validator pool at the next validator rotation.
+Validators looking to cease operation can un-register themselves vai the same [PulseChain validator & staking ui](https://stake.v2.testnet.pulsechain.com/). An un-registered validator will be removed from the validator pool at the next validator rotation.
 > A validator can be re-registered without requiring a new deposit.
