@@ -6,15 +6,15 @@ The PulseChain Testnet is up and running. This document will guide you through c
 
 > **Disclaimer 2**: The state of this network may be reset on occasion, and nothing should be considered permanent after the fork block. We will communicate ahead of time when these resets are planned.
 
-### Release 2
+### Version 2
 
-The second release of the PulseChain Testnet brings the following enhancements:
+The second version of the PulseChain Testnet brings the following enhancements:
 - Enables validator rotation, registration, and staking
 - Simplifies client setup when running a node (*genesis and config files no longer required!*)
 
 ## Connecting Metamask
 
-> If you had metamask connected to Testnet Release 1, you will need to reset your accounts through the metamask options, or remove and re-add the network below
+> If you had metamask connected to Testnet Version 1, you will need to reset your accounts through the metamask options, or remove and re-add the network below
 
 Follow these instructions to manually add the Testnet to your Metamask plugin. A button will be available in the future to do this automatically.
 
@@ -25,7 +25,7 @@ Follow these instructions to manually add the Testnet to your Metamask plugin. A
 - New RPC URL: `https://rpc.v2.testnet.pulsechain.com`
 - Chain ID: `940`
 - Currency Symbol: `tPLS`
-- Block Explorer URL: `https://scan.v2.pulsechain.com`
+- Block Explorer URL: `https://scan.v2.testnet.pulsechain.com`
 
 |   Step 1    |   Step 2    |
 | ----------- | ----------- |
@@ -45,7 +45,7 @@ To get tPLS you can use the tPLS faucet.
 
 ## Connecting a PulseChain Node
 
-If you were previously running a Testnet R1 node, you can re-use your existing blockchain database by rolling back the blockchain. See [Using An Existing Blockchain DB](#using-an-existing-blockchain-db) below.
+If you were previously running a Testnet V1 node, you can re-use your existing blockchain database by rolling back the blockchain. See [Using An Existing Blockchain DB](#using-an-existing-blockchain-db) below.
 
 > **Warning**: The PulseChain Testnet includes **all** of the Ethereum mainnet state up to block `13,224,745`. This means that the system requirements for running a node will be high, particularly the storage requirements. You should only run your own testnet node if needed for development purposes, etc...
 
@@ -129,7 +129,7 @@ docker run -it registry.gitlab.com/pulsechaincom/go-pulse:0.5.0 --pulsechain-tes
 
 ### 4. Re-Initialize Genesis w/ Updated Chain Config
 
-With the blockchain rolled back to the last ethereum mainnet block, you can now reinitialize the genesis for Testnet R2, using the `genesis.json` file you dumped in step 2.
+With the blockchain rolled back to the last ethereum mainnet block, you can now reinitialize the genesis for Testnet V2, using the `genesis.json` file you dumped in step 2.
 
 ```shell
 docker run -v /blockchain:/blockchain registry.gitlab.com/pulsechaincom/go-pulse:0.5.0 --datadir=/blockchain init /blockchain/genesis.json
@@ -155,7 +155,7 @@ PulseChain validators are rotated at the end of each era, on a targeted ~24-hour
 1. Validators already in rotation for the past era will be rewarded transaction fees for blocks they produced throughout the era.
     + Earned fees are paid proportionally to the validator's stakers, based on the validator's revenue share percentage.
       > For example, if the validator has 50% revenue share, and two stakers exist with 2 and 3 tPLS delegated, then the stakers will receive 20% and 30% of the validator's rewards respectively, with the remaining 50% going directly to the validator.
-2. Registered validators will be ranked by their delegated stake.
+2. Registered validators will be ranked by their total delegated stake.
 3. The top **33 validators** will be selected as the authorized set of validators for the next era.
 
 ## Validator Staking
@@ -177,7 +177,7 @@ Users can delegate their tPLS to registered validators, earning a portion of the
 1. Stakes added to validators already in rotation will be considered "Pending" until the end of the current era (validator rotation). 
     - This means that for any given era the validator is in rotation, only the stakes that contributed to the validator being selected (staked before rotation) will be considered during revenue share.
 2. Users can only remove stake from a validator after 24 hours.
-3. You can add to or remove from existing stakes, and it is possible to remove only a portion of the total stake.
+3. You can add to or remove from existing stakes, and it is also possible to remove just a portion of the total stake.
 
 ## Validator Registration
 
@@ -201,5 +201,5 @@ With the above caveats understood, you can register the validator through the [P
 
 ### Unregister a Validator
 
-Validators looking to cease operation can un-register themselves vai the same [PulseChain validator & staking ui](https://stake.v2.testnet.pulsechain.com/). An un-registered validator will be removed from the validator pool at the next validator rotation.
+Validators looking to cease operation can un-register themselves via the same [PulseChain validator & staking ui](https://stake.v2.testnet.pulsechain.com/). An un-registered validator will be removed from the validator pool at the next validator rotation.
 > A validator can be re-registered without requiring a new deposit.
