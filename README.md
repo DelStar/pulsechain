@@ -6,38 +6,37 @@ The PulseChain Testnet is up and running. This document will guide you through c
 
 > **Disclaimer 2**: The state of this network may be reset on occasion, and nothing should be considered permanent after the fork block. We will communicate ahead of time when these resets are planned.
 
-### Version 2
+### Version 2b
 
-The second version of the PulseChain Testnet brings the following enhancements:
-- Enables validator rotation, registration, and staking
-- Simplifies client setup when running a node (*genesis and config files no longer required!*)
+This version of the PulseChain Testnet brings the following enhancements:
+- ValidatorRotation functionality in the staking system contract has been optimized
+- Includes a **beta release** of the sacrifice credit allocations
+- Test run **beta release** of the AMM bot for rebalancing (UniswapV1, UniswapV2, and SushiSwap rebalanced)
 
 ## Connecting Metamask
 
-> If you had metamask connected to Testnet Version 1, you will need to reset your accounts through the metamask options, or remove and re-add the network below
-
-Follow these instructions to manually add the Testnet to your Metamask plugin. A button will be available in the future to do this automatically.
+Follow these instructions to manually add the new Testnet to your Metamask plugin. A button will be available in the future to do this automatically.
 
 **1. Click the Networks dropdown and select "Custom Network"**
 
-**2. Enter the following information:**
-- Network Name: `PulseChain Testnet`
-- New RPC URL: `https://rpc.v2.testnet.pulsechain.com`
-- Chain ID: `940`
+**2. Enter the following information and save (all values below are new):**
+- Network Name: `PulseChain Testnet 2b`
+- New RPC URL: `https://rpc.v2b.testnet.pulsechain.com`
+- Chain ID: `941`
 - Currency Symbol: `tPLS`
-- Block Explorer URL: `https://scan.v2.testnet.pulsechain.com`
+- Block Explorer URL: `https://scan.v2b.testnet.pulsechain.com`
 
 |   Step 1    |   Step 2    |
 | ----------- | ----------- |
 | ![Metamask step1](images/step1.png) | ![Metamask step2](images/step2.png) |
 
-**Congratulations**! You are now connected to the PulseChain Testnet. Existing ethereum accounts that had balances as of block `13,224,745` (*Sep-14-2021 03:48:51 PM +UTC*) will have the equivalent on balance on the PulseChain Testnet.
+**Congratulations**! You are now connected to the PulseChain Testnet. Existing ethereum accounts that had balances as of block `14,360,999` (*Mar-10-2022 07:29:19 PM +UTC*) will have the equivalent on balance on the PulseChain Testnet in addition to the **beta release** of credits awarded from the sacrifice phase.
 
 ## Getting tPLS to use on the PulseChain Testnet
 
 To get tPLS you can use the tPLS faucet.
 
-1. Navigate to the tPLS faucet https://faucet.v2.testnet.pulsechain.com/
+1. Navigate to the tPLS faucet https://faucet.v2b.testnet.pulsechain.com/
 2. Connect your Metamask wallet by clicking on the button.
 3. Enter the address you want to send tPLS to and click the `Request` button.
 4. Wait up to 60 seconds to receive your tPLS.
@@ -45,12 +44,12 @@ To get tPLS you can use the tPLS faucet.
 
 ## Connecting a PulseChain Node
 
-If you were previously running a Testnet V1 node, you can re-use your existing blockchain database by rolling back the blockchain. See [Using An Existing Blockchain DB](#using-an-existing-blockchain-db) below.
+If you were previously running a Testnet V2 node, you can re-use your existing blockchain database by rolling back the blockchain. See [Using An Existing Blockchain DB](#using-an-existing-blockchain-db) below.
 
-> **Warning**: The PulseChain Testnet includes **all** of the Ethereum mainnet state up to block `13,224,745`. This means that the system requirements for running a node will be high, particularly the storage requirements. You should only run your own testnet node if needed for development purposes, etc...
+> **Warning**: The PulseChain Testnet includes **all** of the Ethereum mainnet state up to block `14,360,999`. This means that the system requirements for running a node will be high, particularly the storage requirements. You should only run your own testnet node if needed for development purposes, etc...
 
 HARDWARE
-- You will need at least 750 GB of free storage to store the synchronized chain.
+- You will need at least **800 GB** of free storage to store the synchronized chain.
 - At least 4 cores and 8GB of RAM are recommended. 
 
 SOFTWARE
@@ -58,7 +57,7 @@ SOFTWARE
 - If you prefer, you can compile and run the executable directly, but you will need to tweak the commands below.
 
 
-> **NOTE**: All commands below assume that you want to store all chain data in a local `/blockchain` directory (must have at least 750GB free space).
+> **NOTE**: All commands below assume that you want to store all chain data in a local `/blockchain` directory (must have at least **800GB** free space).
 >
 > If needed, you can modify the commands to mount a different directory in the docker container. To do so, you will change the **absolute path** on the **left side** of the colon `:`, e.g., `docker run -v /path/to/my/dir:/blockchain ...`
 > 
@@ -66,21 +65,19 @@ SOFTWARE
 
 ### 1. Prepare the Blockchain Directory
 
-First, ensure that the intended blockchain datadir has at least 750GB of free space. The directory should be empty.
+First, ensure that the intended blockchain datadir has at least 800GB of free space. The directory should be empty.
 
 ### 2. Start the Pulse Node
 
 Once your blockchain directory is ready, you can start the node and connect to the network by providing the `--pulsechain-testnet` flag.
 
 ```shell
-docker run -v /blockchain:/blockchain -P registry.gitlab.com/pulsechaincom/go-pulse --datadir=/blockchain --pulsechain-testnet
+docker run -v /blockchain:/blockchain -P registry.gitlab.com/pulsechaincom/go-pulse:0.8.0 --datadir=/blockchain --pulsechain-testnet
 ```
 
 ## Using An Existing Blockchain DB
 
 > **Warning**: This is only valid for nodes that were sync'd with a previous version of the **PulseChain Testnet** or the **Ethereum Mainnet** past block `13,224,745`.
-
-> Performing the rollback will require geth to re-generate its internal snapshot.
 
 ### 1. Stop the Existing Blockchain
 
@@ -91,7 +88,7 @@ Stop any existing Go-Pulse or Go-Ethereum processes and let the blockchain grace
 Dump the `genesis.json` file from the latest Go-Pulse release. It is recommended you dump this file into your existing `--datadir` used by the previously running node. Assuming the `/blockchain` directory was being used, we can dump the updated `genesis.json` file with the command below.
 
 ```shell
-docker run registry.gitlab.com/pulsechaincom/go-pulse --pulsechain-testnet dumpgenesis > /blockchain/genesis.json
+docker run registry.gitlab.com/pulsechaincom/go-pulse:0.8.0 --pulsechain-testnet dumpgenesis > /blockchain/genesis.json
 ```
 
 Confirm that the `genesis.json` file has been written to your blockchain datadir. Double check the modified date to ensure this file was just created/updated.
@@ -101,7 +98,7 @@ Confirm that the `genesis.json` file has been written to your blockchain datadir
 In order to rollback the chain, we need to launch the geth console to issue the `debug.setHead("0xC9CB29")` command. It's important to run with the `--nodiscover` flag to prevent the node from syncing any new blocks during this process.
 
 ```shell
-docker run -it registry.gitlab.com/pulsechaincom/go-pulse --pulsechain-testnet --nodiscover console
+docker run -it registry.gitlab.com/pulsechaincom/go-pulse:0.8.0 --pulsechain-testnet --nodiscover console
 ```
 
 **From the interactive console, verify chain state and perform the rollback:**
@@ -116,7 +113,7 @@ docker run -it registry.gitlab.com/pulsechaincom/go-pulse --pulsechain-testnet -
     > debug.setHead("0xC9CB29")
     ```
 
-3. Verify the current block number is now `13,224,745`
+3. Verify the current block number is now `13,224,745` or lower
     ```shell
     > eth.blockNumber
     13224745
@@ -129,7 +126,7 @@ docker run -it registry.gitlab.com/pulsechaincom/go-pulse --pulsechain-testnet -
 
 ### 4. Re-Initialize Genesis w/ Updated Chain Config
 
-With the blockchain rolled back to the last ethereum mainnet block, you can now reinitialize the genesis for Testnet V2, using the `genesis.json` file you dumped in step 2.
+With the blockchain rolled back to the last ethereum mainnet block, you can now reinitialize the genesis for Testnet V2b, using the `genesis.json` file you dumped in step 2.
 
 ```shell
 docker run -v /blockchain:/blockchain registry.gitlab.com/pulsechaincom/go-pulse --datadir=/blockchain init /blockchain/genesis.json
@@ -139,7 +136,7 @@ After the init command has completed, you can follow the normal steps above to [
 
 # Validator Registration, Rotation, and Staking
 
-PulseChain validator registration, staking, rotation, and revenue share are managed via system contracts that can be interacted with through the [PulseChain validator & staking ui](https://stake.v2.testnet.pulsechain.com/).
+PulseChain validator registration, staking, rotation, and revenue share are managed via system contracts that can be interacted with through the [PulseChain validator & staking ui](https://stake.v2b.testnet.pulsechain.com/).
 
 > The staking UI will require that you have Metamask configured and connected to the PulseChain Testnet. See steps above for connecting Metamask.
 
@@ -189,7 +186,7 @@ Running a validator node performs an important role for the PulseChain network, 
 >
 > ***Once again: only register a validator if you are fully committed to maintaining its availability and uptime - THIS IS NOT FOR MOST USERS!***
 
-With the above caveats understood, you can register the validator through the [PulseChain validator & staking ui](https://stake.v2.testnet.pulsechain.com/). Steps for doing so include:
+With the above caveats understood, you can register the validator through the [PulseChain validator & staking ui](https://stake.v2b.testnet.pulsechain.com/). Steps for doing so include:
 
 1. Making a **non-refundable deposit of 500,000 tPLS** to the staking contract from the validator address. This serves to prevent spam registrations.
 > **About the Deposit:** This is intentionally high during the Testnet phase to limit the number of 3rd party validators and ensure network availability and performance. If you have serious intentions of running a high-availability validator for testnet, please reach out to the PulseChain team via Telegram, and we can assist with funding via the Testnet treasury account.
@@ -201,5 +198,5 @@ With the above caveats understood, you can register the validator through the [P
 
 ### Unregister a Validator
 
-Validators looking to cease operation can un-register themselves via the same [PulseChain validator & staking ui](https://stake.v2.testnet.pulsechain.com/). An un-registered validator will be removed from the validator pool at the next validator rotation.
+Validators looking to cease operation can un-register themselves via the same [PulseChain validator & staking ui](https://stake.v2b.testnet.pulsechain.com/). An un-registered validator will be removed from the validator pool at the next validator rotation.
 > A validator can be re-registered without requiring a new deposit.
