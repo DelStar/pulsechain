@@ -72,7 +72,7 @@ First, ensure that the intended blockchain datadir has at least 800GB of free sp
 Once your blockchain directory is ready, you can start the node and connect to the network by providing the `--pulsechain-testnet` flag.
 
 ```shell
-docker run -v /blockchain:/blockchain -P registry.gitlab.com/pulsechaincom/go-pulse:0.8.0 --datadir=/blockchain --pulsechain-testnet
+docker run -v /blockchain:/blockchain -P registry.gitlab.com/pulsechaincom/go-pulse --datadir=/blockchain --pulsechain-testnet
 ```
 
 ## Using An Existing Blockchain DB
@@ -88,7 +88,7 @@ Stop any existing Go-Pulse or Go-Ethereum processes and let the blockchain grace
 Dump the `genesis.json` file from the latest Go-Pulse release. It is recommended you dump this file into your existing `--datadir` used by the previously running node. Assuming the `/blockchain` directory was being used, we can dump the updated `genesis.json` file with the command below.
 
 ```shell
-docker run registry.gitlab.com/pulsechaincom/go-pulse:0.8.0 --pulsechain-testnet dumpgenesis > /blockchain/genesis.json
+docker run registry.gitlab.com/pulsechaincom/go-pulse --pulsechain-testnet dumpgenesis > /blockchain/genesis.json
 ```
 
 Confirm that the `genesis.json` file has been written to your blockchain datadir. Double check the modified date to ensure this file was just created/updated.
@@ -98,7 +98,7 @@ Confirm that the `genesis.json` file has been written to your blockchain datadir
 In order to rollback the chain, we need to launch the geth console to issue the `debug.setHead("0xC9CB29")` command. It's important to run with the `--nodiscover` flag to prevent the node from syncing any new blocks during this process.
 
 ```shell
-docker run -it registry.gitlab.com/pulsechaincom/go-pulse:0.8.0 --pulsechain-testnet --nodiscover console
+docker run -it registry.gitlab.com/pulsechaincom/go-pulse --pulsechain-testnet --nodiscover console
 ```
 
 **From the interactive console, verify chain state and perform the rollback:**
