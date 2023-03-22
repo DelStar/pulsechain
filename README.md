@@ -1,4 +1,4 @@
-# PulseChain Testnet
+# PulseChain Testnet V3
 
 The PulseChain Testnet is up and running. This document will guide you through connecting Metamask to the network and bootstrapping a PulseChain node of your own.
 
@@ -6,78 +6,147 @@ The PulseChain Testnet is up and running. This document will guide you through c
 
 > **Disclaimer 2**: The state of this network may be reset on occasion, and nothing should be considered permanent after the fork block. We will communicate ahead of time when these resets are planned.
 
-### Version 2b
+### **Version 3** 🎉
 
-This version of the PulseChain Testnet brings the following enhancements:
-- ValidatorRotation functionality in the staking system contract has been optimized
-- Includes a **beta release** of the sacrifice credit allocations
-- Test run **beta release** of the AMM bot for rebalancing (UniswapV1, UniswapV2, and SushiSwap rebalanced)
+This iteration of PulseChain is an entirely new implementation and represents a hard departure from prior testnets. 
+
+The new implementation is based on Ethereum's POS model and implements an entirely new beacon chain while forking the Ethereum execution chain and state.
+> 💭 *Previous versions were based on the POSA (proof of staked authority) model.*
+
+**This version of the PulseChain Testnet brings the following enhancements:**
+-  A revamped consensus model based on Ethereum POS.
+- Decreased slot time compared with Ethereum `10s vs 12s (a ~17% speedup)`.
+- Validator reward burning (= more deflationary pressure).
+    + 25% fee burn + additional burn to compensate for reduced slot time.
+- **Multi-client support:**
+    + Consensus Clients: [Prysm-Pulse](https://gitlab.com/pulsechaincom/prysm-pulse) and [Lighthouse-Pulse](https://gitlab.com/pulsechaincom/lighthouse-pulse).
+    + Execution clients: [Go-Pulse](https://gitlab.com/pulsechaincom/go-pulse) and [Erigon-Pulse](https://gitlab.com/pulsechaincom/erigon-pulse).
+- Sacrifice credits have been written.
+- Ethereum Staker/Validator deposits have been refunded.
+- The AMM bot has been executed to rebalance various automated market-makers.
+
+## Exploring the PulseChain Testnet
+
+Public block and beacon explorers are available at the URLs below:
+
+- [PulseChain Block Explorer](https://scan.v3.testnet.pulsechain.com)
+- [PulseChain Beacon Explorer](https://beacon.v3.testnet.pulsechain.com)
+
+> The PulseChain team welcomes the development 3rd-party explorers!
 
 ## Connecting Metamask
 
 Follow these instructions to manually add the new Testnet to your Metamask plugin. A button will be available in the future to do this automatically.
 
-**1. Click the Networks dropdown and select "Custom Network"**
+**1. Click the Networks dropdown and select `Add network`** ([Screenshot](images/step1.png)).
 
-**2. Enter the following information and save (all values below are new):**
-- Network Name: `PulseChain Testnet 2b`
-- New RPC URL: `https://rpc.v2b.testnet.pulsechain.com`
-- Chain ID: `941`
+**2. At the bottom of the network list, click `Add a network manually`** ([Screenshot](images/step2.png)).
+
+**3. Enter the following information into the form and `save`:** ([Screenshot](images/step3.png)).
+- Network Name: `PulseChain Testnet-V3`
+- New RPC URL: `https://rpc.v3.testnet.pulsechain.com`
+- Chain ID: `942`
 - Currency Symbol: `tPLS`
-- Block Explorer URL: `https://scan.v2b.testnet.pulsechain.com`
+- Block explorer URL: `https://scan.v3.testnet.pulsechain.com`
 
-|   Step 1    |   Step 2    |
-| ----------- | ----------- |
-| ![Metamask step1](images/step1.png) | ![Metamask step2](images/step2.png) |
-
-**Congratulations**! You are now connected to the PulseChain Testnet. Existing ethereum accounts that had balances as of block `14,360,999` (*Mar-10-2022 07:29:19 PM +UTC*) will have the equivalent on balance on the PulseChain Testnet in addition to the **beta release** of credits awarded from the sacrifice phase.
+**Congratulations**! You are now connected to the PulseChain Testnet-V3. Existing ethereum accounts that had balances as of block `16,492,699` (*Jan-26-2023 06:11:35 PM +UTC*) will have the equivalent balance on the PulseChain Testnet in addition to the **beta release** of credits from the sacrifice phase as well as any ethereum staking deposit refunds.
 
 ## Getting tPLS to use on the PulseChain Testnet
 
 To get tPLS you can use the tPLS faucet.
 
-1. Navigate to the tPLS faucet https://faucet.v2b.testnet.pulsechain.com/
+1. Navigate to the tPLS faucet https://faucet.v3.testnet.pulsechain.com/
 2. Connect your Metamask wallet by clicking on the button.
 3. Enter the address you want to send tPLS to and click the `Request` button.
 4. Wait up to 60 seconds to receive your tPLS.
 
+## Advanced Users: Running a PulseChain Node
 
-## Connecting a PulseChain Node
+If you have an archive node running on Ethereum Mainnet or PulseChain Testnet-V2B, you can save some sync time by rolling back and re-using your existing blockchain DB. See [Using An Existing Blockchain DB](#experts-only-using-an-existing-blockchain-db) below.
 
-If you were previously running a Testnet V2 node, you can re-use your existing blockchain database by rolling back the blockchain. See [Using An Existing Blockchain DB](#using-an-existing-blockchain-db) below.
-
-> **Warning**: The PulseChain Testnet includes **all** of the Ethereum mainnet state up to block `14,360,999`. This means that the system requirements for running a node will be high, particularly the storage requirements. You should only run your own testnet node if needed for development purposes, etc...
+> **Warning**: The PulseChain Testnet includes **all** of the Ethereum mainnet state up to block `16,492,699`. This means that the system requirements for running a node will be high, particularly the storage requirements. You should only run your own testnet node if needed for development purposes, etc...
 
 HARDWARE
-- You will need at least **800 GB** of free storage to store the synchronized chain.
-- At least 4 cores and 8GB of RAM are recommended. 
+- A fast CPU with 4+ cores
+- 16 GB+ of RAM
+- 1 TB+ free storage (SSD) for a Full Node
+- 15 TB+ free storage (SSD) for an Archive Node
 
 SOFTWARE
 - [Docker](https://docs.docker.com/get-docker/) is recommended, and the commands below will tailored to running a dockerized node. By building and running the node in docker, we eliminate any environmental differences like the local golang version or the host OS.
 - If you prefer, you can compile and run the executable directly, but you will need to tweak the commands below.
 
 
-> **NOTE**: All commands below assume that you want to store all chain data in a local `/blockchain` directory (must have at least **800GB** free space).
+> **NOTE**: All commands below assume that you want to store all chain data in a local `/blockchain` directory (must have at least **1TB** free space).
 >
-> If needed, you can modify the commands to mount a different directory in the docker container. To do so, you will change the **absolute path** on the **left side** of the colon `:`, e.g., `docker run -v /path/to/my/dir:/blockchain ...`
+> If needed, you can modify the commands to mount a different directory in the docker container. To do so, you will change the **absolute path** on the **left side** of the colon `:`, e.g., `docker run -v /path/to/my/dir/:/blockchain ...`
 > 
 > For more information see the Docker [run command reference](https://docs.docker.com/engine/reference/commandline/run/#mount-volume--v---read-only).
 
 ### 1. Prepare the Blockchain Directory
 
-First, ensure that the intended blockchain datadir has at least 800GB of free space. The directory should be empty.
+First, ensure that the intended blockchain datadir has at least 1TB of free space. The directory should be empty.
 
-### 2. Start the Pulse Node
+### 2. Generate JWT Secret
 
-Once your blockchain directory is ready, you can start the node and connect to the network by providing the `--pulsechain-testnet` flag.
+The HTTP connection between your beacon node and execution node needs to be authenticated using a [JWT token](https://jwt.io/). We need to save this file in the blockchain directory, to be read by both clients. There are several ways to generate this JWT token:
 
+- Use a utility like OpenSSL to create the token via command: `openssl rand -hex 32 | tr -d "\n" > "/blockchain/jwt.hex"`.
+- Use an online generator like [this](https://seanwasere.com/generate-random-hex/). Copy and paste this value into a `/blockchain/jwt.hex` file.
+
+### 3. Start the PulseChain Execution Client
+
+Once your blockchain directory is ready, you can start the execution client and connect to the network by providing the `pulsechain-testnet` flag. You can run either Go-Pulse (recommended) **OR** Erigon-Pulse:
+
+Option 1: [Go-Pulse](https://gitlab.com/pulsechaincom/go-pulse)
 ```shell
-docker run -v /blockchain:/blockchain -P registry.gitlab.com/pulsechaincom/go-pulse --datadir=/blockchain --pulsechain-testnet
+docker run --network=host -v /blockchain:/blockchain registry.gitlab.com/pulsechaincom/go-pulse \
+--pulsechain-testnet \
+--authrpc.jwtsecret=/blockchain/jwt.hex \
+--datadir=/blockchain/execution
 ```
 
-## Using An Existing Blockchain DB
+Option 2: [Erigon-Pulse](https://gitlab.com/pulsechaincom/erigon-pulse)
+```shell
+docker run --network=host -v /blockchain:/blockchain registry.gitlab.com/pulsechaincom/erigon-pulse \
+--chain=pulsechain-testnet \
+--authrpc.jwtsecret=/blockchain/jwt.hex \
+--datadir=/blockchain/execution \
+--externalcl
+```
 
-> **Warning**: This is only valid for nodes that were sync'd with a previous version of the **PulseChain Testnet** or the **Ethereum Mainnet** past block `13,224,745`.
+> Do not Erigon's internal consensus layer at this time, passing `--externalcl` (shown above) disables this experimental feature.
+
+### 4. Start the PulseChain Consensus Client
+
+Once your execution client is running, you can start the consensus client and connect to the network by providing the `pulsechain-testnet` flag. You can run either Prysm-Pulse (recommended) **OR** Lighthouse-Pulse:
+
+Option 1: [Prysm-Pulse](https://gitlab.com/pulsechaincom/prysm-pulse)
+```shell
+docker run --network=host -v /blockchain:/blockchain registry.gitlab.com/pulsechaincom/prysm-pulse \
+--pulsechain-testnet \
+--jwt-secret=/blockchain/jwt.hex \
+--datadir=/blockchain/consensus \
+--checkpoint-sync-url=https://checkpoint.v3.testnet.pulsechain.com \
+--genesis-beacon-api-url=https://checkpoint.v3.testnet.pulsechain.com
+```
+
+Option 2: [Lighthouse-Pulse](https://gitlab.com/pulsechaincom/lighthouse-pulse)
+```shell
+docker run --network=host -v /blockchain:/blockchain registry.gitlab.com/pulsechaincom/lighthouse-pulse \
+--network=pulsechain-testnet \
+--execution-jwt=/blockchain/jwt.hex \
+--datadir=/blockchain/consensus \
+--execution-endpoint=http://localhost:8551 \
+--checkpoint-sync-url https://checkpoint.v3.testnet.pulsechain.com \
+--http 
+```
+
+## Experts Only: Using An Existing Blockchain DB
+
+> **Warning**: This is only valid for **archive nodes** that were sync'd with a previous version of the **PulseChain Testnet** or the **Ethereum Mainnet**.
+
+> We will only reuse an existing execution-layer database since PulseChain starts with a new Beacon chain.
 
 ### 1. Stop the Existing Blockchain
 
@@ -95,7 +164,11 @@ Confirm that the `genesis.json` file has been written to your blockchain datadir
 
 ### 3. Perform Rollback
 
-In order to rollback the chain, we need to launch the geth console to issue the `debug.setHead("0xC9CB29")` command. It's important to run with the `--nodiscover` flag to prevent the node from syncing any new blocks during this process.
+We will need to rollback to **the last ethereum mainnet block in your DB less than `16,492,700`.
+- If running an Ethereum Mainnet node, you can rollback to `16492699` (`0xFBA89B`)
+- If running a PulseChain Testnet-V2B node, you will need to rollback further to `14360999` (`0xDB21A7`)
+
+In order to rollback the chain, we need to launch the geth console to issue the `debug.setHead()` command. It's important to run with the `--nodiscover` flag to prevent the node from syncing any new blocks during this process.
 
 ```shell
 docker run -it registry.gitlab.com/pulsechaincom/go-pulse --pulsechain-testnet --nodiscover console
@@ -103,20 +176,19 @@ docker run -it registry.gitlab.com/pulsechaincom/go-pulse --pulsechain-testnet -
 
 **From the interactive console, verify chain state and perform the rollback:**
 
-1. Verify the current block number is above `13,224,745`
+1. Perform the chain rollback to block the block number shown above:
     ```shell
-    > eth.blockNumber
+    # for eth mainnet archive
+    > debug.setHead("0xFBA89B")
+
+    # for pulsechain-testnet-v2b archive
+    > debug.setHead("0xDB21A7")
     ```
 
-2. Perform the chain rollback to block `13,224,745`
-    ```shell
-    > debug.setHead("0xC9CB29")
-    ```
-
-3. Verify the current block number is now `13,224,745` or lower
+3. Verify the block number has been updated
     ```shell
     > eth.blockNumber
-    13224745
+    16492699
     ```
 
 3. Exit the geth console
@@ -126,77 +198,20 @@ docker run -it registry.gitlab.com/pulsechaincom/go-pulse --pulsechain-testnet -
 
 ### 4. Re-Initialize Genesis w/ Updated Chain Config
 
-With the blockchain rolled back to the last ethereum mainnet block, you can now reinitialize the genesis for Testnet V2b, using the `genesis.json` file you dumped in step 2.
+With the blockchain rolled back to the last ethereum mainnet block, you can now reinitialize the genesis for Testnet V3, using the `genesis.json` file you dumped in step 2.
 
 ```shell
 docker run -v /blockchain:/blockchain registry.gitlab.com/pulsechaincom/go-pulse --datadir=/blockchain init /blockchain/genesis.json
 ```
 
-After the init command has completed, you can follow the normal steps above to [Start the Pulse Node](#2-start-the-pulse-node) and begin syncing from the fork block.
+After the init command has completed, you can follow the normal steps above to [Advanced Users: Running a PulseChain Node](#advanced-users-running-a-pulsechain-node).
+- You will use the existing execution directory for your execution node only.
+- It's recommended to move the execution db data into a subdirectory such as `/blockchain/execution`.
 
-# Validator Registration, Rotation, and Staking
+# Staking and Running a Validator
 
-PulseChain validator registration, staking, rotation, and revenue share are managed via system contracts that can be interacted with through the [PulseChain validator & staking ui](https://stake.v2b.testnet.pulsechain.com/).
+Running a Validator is a **responsibility** to keep your node healthy and running, or your deposited funds will be at risk. A `32 million tPLS` deposit will be required to register a validator.
 
-> The staking UI will require that you have Metamask configured and connected to the PulseChain Testnet. See steps above for connecting Metamask.
+If you are interested in running a Validator for the PulseChain Testnet-V3 head over to our [Staking Launchpad](https://launchpad.v3.testnet.pulsechain.com).
 
-From the staking UI, users can:
-- View information about the network validators: their total rewards, % revenue share, number of misdemeanors & felonies.
-- Delegate stake to registered validators.
-- Remove stake from registered validators.
-- Register new validators.
-
-## Validator Rotation
-
-PulseChain validators are rotated at the end of each era, on a targeted ~24-hour basis, every `28,800 blocks`. On these blocks, several operations will occur:
-1. Validators already in rotation for the past era will be rewarded transaction fees for blocks they produced throughout the era.
-    + Earned fees are paid proportionally to the validator's stakers, based on the validator's revenue share percentage.
-      > For example, if the validator has 50% revenue share, and two stakers exist with 2 and 3 tPLS delegated, then the stakers will receive 20% and 30% of the validator's rewards respectively, with the remaining 50% going directly to the validator.
-2. Registered validators will be ranked by their total delegated stake.
-3. The top **33 validators** will be selected as the authorized set of validators for the next era.
-
-## Validator Staking
-
-Users can delegate their tPLS to registered validators, earning a portion of the validator's rewards if the validator is selected for rotation. Stakers have a responsibility to delegate stake to high-performing and reliable nodes that will service the network well, and users should make informed decisions when staking. 
-
-**Considerations when choosing validators for staking:**
-1. The total stake: only the top 33 validators by total stake will be brought into rotation, and only validators in rotation will earn rewards for themselves and their stakers. Additionally, staker revenue is paid out proportionally based on your share of the total stake.
-2. The number of misdemeanors & felonies represents the historical offenses/slashes that have been given to the validator for lack of uptime or bad behavior. Misdemeanor and felonies result in loss of rewards (but not principal) for the validator and its stakers.
-3. The total rewards is the total amount of revenue earned by the validator over time, including revenue shared with its stakers.
-
-> Pay attention to the user interface when adding stakes, it will show your projected stake and projected revenue share. Your projected revenue share is based on the validator's revenue share * your portion of the total stake delegated to that validator.
-
-| Add Stake | Remove Stake | 
-| --------- | ------------ |
-| ![Add Stake](images/add-stake.png) | ![Remove Stake](images/remove-stake.png) |
-
-**Staking rules:**
-1. Stakes added to validators already in rotation will be considered "Pending" until the end of the current era (validator rotation). 
-    - This means that for any given era the validator is in rotation, only the stakes that contributed to the validator being selected (staked before rotation) will be considered during revenue share.
-2. Users can only remove stake from a validator after 24 hours.
-3. You can add to or remove from existing stakes, and it is also possible to remove just a portion of the total stake.
-
-## Validator Registration
-
-Running a validator node performs an important role for the PulseChain network, and the performance of the network depends on the performance of its underlying validators.
-
-**Users should not consider running a validator node unless you have experience running a full blockchain node with high availability!**
-
-> **Before Registering:** You should have the validator node running and fully synchronized with the network so that the moment the validator is brought into rotation it is ready to sign blocks for the network.
->
-> ***Once again: only register a validator if you are fully committed to maintaining its availability and uptime - THIS IS NOT FOR MOST USERS!***
-
-With the above caveats understood, you can register the validator through the [PulseChain validator & staking ui](https://stake.v2b.testnet.pulsechain.com/). Steps for doing so include:
-
-1. Making a **non-refundable deposit of 500,000 tPLS** to the staking contract from the validator address. This serves to prevent spam registrations.
-> **About the Deposit:** This is intentionally high during the Testnet phase to limit the number of 3rd party validators and ensure network availability and performance. If you have serious intentions of running a high-availability validator for testnet, please reach out to the PulseChain team via Telegram, and we can assist with funding via the Testnet treasury account.
-
-2. Register the new validator with the following options:
-    - Fee Address (Optional): If provided, rewards earned by the validator will be sent to the fee address. If not provided, the fees are paid directly to the validator address.
-    - Revenue Share: The percent of revenue that will be paid out to users with stake delegated to this validator.
-        + Considerations: higher revenue share encourages more stakers, lower revenue share captures a higher share of profits for the validator.
-
-### Unregister a Validator
-
-Validators looking to cease operation can un-register themselves via the same [PulseChain validator & staking ui](https://stake.v2b.testnet.pulsechain.com/). An un-registered validator will be removed from the validator pool at the next validator rotation.
-> A validator can be re-registered without requiring a new deposit.
+> At this time, there is no ability to deregister and un-stake. We are following upstream progress and will be bringing the feature to PulseChain soon.
