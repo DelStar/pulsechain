@@ -101,7 +101,7 @@ Once your blockchain directory is ready, you can start the execution client and 
 Option 1: [Go-Pulse](https://gitlab.com/pulsechaincom/go-pulse)
 ```shell
 docker run --network=host -v /blockchain:/blockchain registry.gitlab.com/pulsechaincom/go-pulse \
---pulsechain-testnet \
+--pulsechain-testnet-v3 \
 --authrpc.jwtsecret=/blockchain/jwt.hex \
 --datadir=/blockchain/execution
 ```
@@ -109,7 +109,7 @@ docker run --network=host -v /blockchain:/blockchain registry.gitlab.com/pulsech
 Option 2: [Erigon-Pulse](https://gitlab.com/pulsechaincom/erigon-pulse)
 ```shell
 docker run --network=host -v /blockchain:/blockchain registry.gitlab.com/pulsechaincom/erigon-pulse \
---chain=pulsechain-testnet \
+--chain=pulsechain-testnet-v3 \
 --authrpc.jwtsecret=/blockchain/jwt.hex \
 --datadir=/blockchain/execution \
 --externalcl
@@ -124,7 +124,7 @@ Once your execution client is running, you can start the consensus client and co
 Option 1: [Prysm-Pulse](https://gitlab.com/pulsechaincom/prysm-pulse)
 ```shell
 docker run --network=host -v /blockchain:/blockchain registry.gitlab.com/pulsechaincom/prysm-pulse \
---pulsechain-testnet \
+--pulsechain-testnet-v3 \
 --jwt-secret=/blockchain/jwt.hex \
 --datadir=/blockchain/consensus \
 --checkpoint-sync-url=https://checkpoint.v3.testnet.pulsechain.com \
@@ -134,7 +134,7 @@ docker run --network=host -v /blockchain:/blockchain registry.gitlab.com/pulsech
 Option 2: [Lighthouse-Pulse](https://gitlab.com/pulsechaincom/lighthouse-pulse)
 ```shell
 docker run --network=host -v /blockchain:/blockchain registry.gitlab.com/pulsechaincom/lighthouse-pulse \
---network=pulsechain-testnet \
+--network=pulsechain_testnet_v3 \
 --execution-jwt=/blockchain/jwt.hex \
 --datadir=/blockchain/consensus \
 --execution-endpoint=http://localhost:8551 \
