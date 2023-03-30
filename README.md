@@ -123,7 +123,7 @@ Once your execution client is running, you can start the consensus client and co
 
 Option 1: [Prysm-Pulse](https://gitlab.com/pulsechaincom/prysm-pulse)
 ```shell
-docker run --network=host -v /blockchain:/blockchain registry.gitlab.com/pulsechaincom/prysm-pulse \
+docker run --network=host -v /blockchain:/blockchain registry.gitlab.com/pulsechaincom/prysm-pulse/beacon-chain:latest \
 --pulsechain-testnet-v3 \
 --jwt-secret=/blockchain/jwt.hex \
 --datadir=/blockchain/consensus \
@@ -133,7 +133,7 @@ docker run --network=host -v /blockchain:/blockchain registry.gitlab.com/pulsech
 
 Option 2: [Lighthouse-Pulse](https://gitlab.com/pulsechaincom/lighthouse-pulse)
 ```shell
-docker run --network=host -v /blockchain:/blockchain registry.gitlab.com/pulsechaincom/lighthouse-pulse \
+docker run --network=host -v /blockchain:/blockchain registry.gitlab.com/pulsechaincom/lighthouse-pulse:latest \
 --network=pulsechain_testnet_v3 \
 --execution-jwt=/blockchain/jwt.hex \
 --datadir=/blockchain/consensus \
