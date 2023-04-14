@@ -1,4 +1,4 @@
-# PulseChain Testnet V3
+# PulseChain Testnet V4
 
 The PulseChain Testnet is up and running. This document will guide you through connecting Metamask to the network and bootstrapping a PulseChain node of your own.
 
@@ -6,15 +6,12 @@ The PulseChain Testnet is up and running. This document will guide you through c
 
 > **Disclaimer 2**: The state of this network may be reset on occasion, and nothing should be considered permanent after the fork block. We will communicate ahead of time when these resets are planned.
 
-### **Version 3** 🎉
+### **Version 4**
 
-This iteration of PulseChain is an entirely new implementation and represents a hard departure from prior testnets. 
-
-The new implementation is based on Ethereum's POS model and implements an entirely new beacon chain while forking the Ethereum execution chain and state.
-> 💭 *Previous versions were based on the POSA (proof of staked authority) model.*
+For Testnet-V4, beacon chain presets have been adjusted to correct the issuance rate and validator APR.
 
 **This version of the PulseChain Testnet brings the following enhancements:**
--  A revamped consensus model based on Ethereum POS.
+- A revamped consensus model based on Ethereum POS.
 - Decreased slot time compared with Ethereum `10s vs 12s (a ~17% speedup)`.
 - Validator reward burning (= more deflationary pressure).
     + 25% fee burn + additional burn to compensate for reduced slot time.
@@ -29,8 +26,8 @@ The new implementation is based on Ethereum's POS model and implements an entire
 
 Public block and beacon explorers are available at the URLs below:
 
-- [PulseChain Block Explorer](https://scan.v3.testnet.pulsechain.com)
-- [PulseChain Beacon Explorer](https://beacon.v3.testnet.pulsechain.com)
+- [PulseChain Block Explorer](https://scan.v4.testnet.pulsechain.com)
+- [PulseChain Beacon Explorer](https://beacon.v4.testnet.pulsechain.com)
 
 > The PulseChain team welcomes the development 3rd-party explorers!
 
@@ -43,19 +40,19 @@ Follow these instructions to manually add the new Testnet to your Metamask plugi
 **2. At the bottom of the network list, click `Add a network manually`** ([Screenshot](images/step2.png)).
 
 **3. Enter the following information into the form and `save`:** ([Screenshot](images/step3.png)).
-- Network Name: `PulseChain Testnet-V3`
-- New RPC URL: `https://rpc.v3.testnet.pulsechain.com`
-- Chain ID: `942`
+- Network Name: `PulseChain Testnet-V4`
+- New RPC URL: `https://rpc.v4.testnet.pulsechain.com`
+- Chain ID: `943`
 - Currency Symbol: `tPLS`
-- Block explorer URL: `https://scan.v3.testnet.pulsechain.com`
+- Block explorer URL: `https://scan.v4.testnet.pulsechain.com`
 
-**Congratulations**! You are now connected to the PulseChain Testnet-V3. Existing ethereum accounts that had balances as of block `16,492,699` (*Jan-26-2023 06:11:35 PM +UTC*) will have the equivalent balance on the PulseChain Testnet in addition to the **beta release** of credits from the sacrifice phase as well as any ethereum staking deposit refunds.
+**Congratulations**! You are now connected to the PulseChain Testnet-V4. Existing ethereum accounts that had balances as of block `16,492,699` (*Jan-26-2023 06:11:35 PM +UTC*) will have the equivalent balance on the PulseChain Testnet in addition to the **beta release** of credits from the sacrifice phase as well as any ethereum staking deposit refunds.
 
 ## Getting tPLS to use on the PulseChain Testnet
 
 To get tPLS you can use the tPLS faucet.
 
-1. Navigate to the tPLS faucet https://faucet.v3.testnet.pulsechain.com/
+1. Navigate to the tPLS faucet https://faucet.v4.testnet.pulsechain.com/
 2. Connect your Metamask wallet by clicking on the button.
 3. Enter the address you want to send tPLS to and click the `Request` button.
 4. Wait up to 60 seconds to receive your tPLS.
@@ -101,7 +98,7 @@ Once your blockchain directory is ready, you can start the execution client and 
 Option 1: [Go-Pulse](https://gitlab.com/pulsechaincom/go-pulse)
 ```shell
 docker run --network=host -v /blockchain:/blockchain registry.gitlab.com/pulsechaincom/go-pulse \
---pulsechain-testnet-v3 \
+--pulsechain-testnet-v4 \
 --authrpc.jwtsecret=/blockchain/jwt.hex \
 --datadir=/blockchain/execution
 ```
@@ -109,7 +106,7 @@ docker run --network=host -v /blockchain:/blockchain registry.gitlab.com/pulsech
 Option 2: [Erigon-Pulse](https://gitlab.com/pulsechaincom/erigon-pulse)
 ```shell
 docker run --network=host -v /blockchain:/blockchain registry.gitlab.com/pulsechaincom/erigon-pulse \
---chain=pulsechain-testnet-v3 \
+--chain=pulsechain-testnet-v4 \
 --authrpc.jwtsecret=/blockchain/jwt.hex \
 --datadir=/blockchain/execution \
 --externalcl
@@ -123,22 +120,22 @@ Once your execution client is running, you can start the consensus client and co
 
 Option 1: [Prysm-Pulse](https://gitlab.com/pulsechaincom/prysm-pulse)
 ```shell
-docker run --network=host -v /blockchain:/blockchain registry.gitlab.com/pulsechaincom/prysm-pulse/beacon-chain:latest \
---pulsechain-testnet-v3 \
+docker run --network=host -v /blockchain:/blockchain registry.gitlab.com/pulsechaincom/prysm-pulse/beacon-chain \
+--pulsechain-testnet-v4 \
 --jwt-secret=/blockchain/jwt.hex \
 --datadir=/blockchain/consensus \
---checkpoint-sync-url=https://checkpoint.v3.testnet.pulsechain.com \
---genesis-beacon-api-url=https://checkpoint.v3.testnet.pulsechain.com
+--checkpoint-sync-url=https://checkpoint.v4.testnet.pulsechain.com \
+--genesis-beacon-api-url=https://checkpoint.v4.testnet.pulsechain.com
 ```
 
 Option 2: [Lighthouse-Pulse](https://gitlab.com/pulsechaincom/lighthouse-pulse)
 ```shell
-docker run --network=host -v /blockchain:/blockchain registry.gitlab.com/pulsechaincom/lighthouse-pulse:latest \
---network=pulsechain_testnet_v3 \
+docker run --network=host -v /blockchain:/blockchain registry.gitlab.com/pulsechaincom/lighthouse-pulse \
+--network=pulsechain_testnet_v4 \
 --execution-jwt=/blockchain/jwt.hex \
 --datadir=/blockchain/consensus \
 --execution-endpoint=http://localhost:8551 \
---checkpoint-sync-url https://checkpoint.v3.testnet.pulsechain.com \
+--checkpoint-sync-url https://checkpoint.v4.testnet.pulsechain.com \
 --http 
 ```
 
@@ -198,7 +195,7 @@ docker run -it registry.gitlab.com/pulsechaincom/go-pulse --pulsechain-testnet -
 
 ### 4. Re-Initialize Genesis w/ Updated Chain Config
 
-With the blockchain rolled back to the last ethereum mainnet block, you can now reinitialize the genesis for Testnet V3, using the `genesis.json` file you dumped in step 2.
+With the blockchain rolled back to the last ethereum mainnet block, you can now reinitialize the genesis for Testnet V4, using the `genesis.json` file you dumped in step 2.
 
 ```shell
 docker run -v /blockchain:/blockchain registry.gitlab.com/pulsechaincom/go-pulse --datadir=/blockchain init /blockchain/genesis.json
@@ -212,6 +209,6 @@ After the init command has completed, you can follow the normal steps above to [
 
 Running a Validator is a **responsibility** to keep your node healthy and running, or your deposited funds will be at risk. A `32 million tPLS` deposit will be required to register a validator.
 
-If you are interested in running a Validator for the PulseChain Testnet-V3 head over to our [Staking Launchpad](https://launchpad.v3.testnet.pulsechain.com).
+If you are interested in running a Validator for the PulseChain Testnet-V4 head over to our [Staking Launchpad](https://launchpad.v4.testnet.pulsechain.com).
 
 > At this time, there is no ability to deregister and un-stake. We are following upstream progress and will be bringing the feature to PulseChain soon.
